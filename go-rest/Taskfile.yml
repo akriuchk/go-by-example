@@ -1,0 +1,32 @@
+version: "3"
+
+tasks:
+  build:
+    desc: Build the app
+    cmds:
+      - GOFLAGS=-mod=mod go build -o bin/go-rest-api main.go
+  
+  build.mac:
+    desc: Build exec for mac
+    cmds:
+      - GOOS=darwin GOARCH=amd64 go build -o bin/go-rest-api-amd64 main.go
+
+  run:
+    desc: Run the app
+    cmds:
+      - GOFLAGS=-mod=mod go run main.go
+
+  swagger.gen:
+    desc: Generate Go code
+    cmds:
+      - GOFLAGS=-mod=mod go generate github.com/akriuchk/go-by-example/go-rest/app github.com/akriuchk/go-by-example/go-rest/package/swagger
+
+  swagger.validate:
+    desc: Validate swagger
+    cmds:
+      - swagger validate package/swagger/swagger.yml
+
+  swagger.doc:
+    desc: Doc for swagger
+    cmds:
+      - docker run -i yousan/swagger-yaml-to-html < package/swagger/swagger.yml > doc/index.html
